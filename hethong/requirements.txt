@@ -1,0 +1,5 @@
+ultralytics
+opencv-python
+pyserial
+numpy
+# torch/torchvision: install the CUDA build first (see README)
