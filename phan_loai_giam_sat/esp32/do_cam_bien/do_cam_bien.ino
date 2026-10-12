@@ -25,7 +25,7 @@ struct Sensor {
   bool raw, state;      // state = true khi cam bien dang bat
   uint32_t tRaw, tOn;
   void begin() {
-    pinMode(pin, INPUT);              // da co tro keo len ngoai; neu khong co: doi thanh INPUT_PULLUP khi thu tren ban
+    pinMode(pin, INPUT_PULLUP);              // da co tro keo len ngoai; neu khong co: doi thanh INPUT_PULLUP khi thu tren ban
     raw = state = (digitalRead(pin) == ACTIVE_LEVEL);
     tRaw = tOn = millis();
   }
