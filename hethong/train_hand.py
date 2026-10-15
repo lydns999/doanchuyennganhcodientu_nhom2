@@ -3,7 +3,7 @@ from pathlib import Path
 from ultralytics import YOLO
 
 DATASET = Path("dataset").resolve()
-EPOCHS = 100
+EPOCHS = 10
 IMGSZ = 640
 BATCH = 16          
 BASE_MODEL = "yolov8n.pt"
@@ -39,7 +39,6 @@ def main():
         patience=25,        
         name="hand",
         exist_ok=True,
-
         degrees=10,
         translate=0.1,
         scale=0.4,

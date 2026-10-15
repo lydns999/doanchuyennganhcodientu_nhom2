@@ -1,14 +1,10 @@
-"""
-  SPACE = save 
-  a     = autosave 
-  q     = quit
-"""
+
 import time
 from pathlib import Path
 
 import cv2
 
-CAM_INDEX = 1            
+CAM_INDEX = 0           # C270
 FRAME_W, FRAME_H = 640, 480
 OUT_DIR = Path("dataset_raw")
 AUTO_INTERVAL = 0.6      
