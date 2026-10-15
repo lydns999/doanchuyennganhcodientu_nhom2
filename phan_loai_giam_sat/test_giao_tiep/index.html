@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Thử giao tiếp ESP32</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f3f4f1;color:#1d2420;font:16px/1.4 "Segoe UI",system-ui,sans-serif}
+main{width:min(560px,92vw);background:#fff;border:1px solid #d5d8d0;border-radius:14px;padding:28px 28px 24px;text-align:center}
+h1{font-size:18px;margin:0 0 4px} .sub{color:#5f6862;font-size:14px;margin-bottom:18px}
+#n{font-size:clamp(88px,22vw,160px);line-height:1;font-weight:600;margin:6px 0 2px;font-variant-numeric:tabular-nums}
+#tt{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:99px;background:#eef0ec;font-weight:600;font-size:14px}
+.d{width:10px;height:10px;border-radius:50%;background:#aab0a8} .on .d{background:#1f9d55} .off .d{background:#e49b00} .mat .d{background:#d6372b}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+button{font:inherit;font-weight:650;padding:14px;border-radius:10px;border:1px solid #b9beb6;background:#f7f8f5;cursor:pointer}
+button:hover:not(:disabled){border-color:#1d2420} button:disabled{opacity:.45;cursor:not-allowed}
+#msg{min-height:20px;margin-top:14px;font-size:14px;color:#5f6862}
+@media(prefers-color-scheme:dark){body{background:#14171a;color:#e6ebe8}main{background:#1e2327;border-color:#3a4249}.sub,#msg{color:#97a19c}#tt{background:#272d32}button{background:#272d32;border-color:#3a4249;color:#e6ebe8}}
+</style></head><body><main>
+<h1>Thử giao tiếp ESP32 với giao diện</h1>
+<div class="sub">Số vật đi qua cảm biến E3F</div>
+<div id="n">-</div>
+<div id="tt"><i class="d"></i><span id="ts">Chưa có tín hiệu từ ESP32</span></div>
+<div class="btns"><button id="bt" disabled>BẬT ĐẾM</button><button id="br" disabled>RESET SỐ ĐẾM</button></div>
+<div id="msg"></div>
+</main>
+<script>
+const $=i=>document.getElementById(i); let S=null;
+async function lay(){
+  try{S=await (await fetch("/api/state",{cache:"no-store"})).json()}catch(e){S=null}
+  const ok=S&&S.ket_noi;
+  $("n").textContent=S&&S.n!==null?S.n:"-";
+  const t=$("tt"); t.className=!S||S.n===null?"":!ok?"mat":S.dang_dem?"on":"off";
+  $("ts").textContent=!S?"Mất kết nối với server":S.n===null?"Chưa có tín hiệu từ ESP32":!ok?"ESP32 mất kết nối ("+Math.floor(S.tuoi)+" giây)":S.dang_dem?"Đang đếm":"Đã tắt đếm";
+  $("bt").disabled=!ok; $("br").disabled=!ok||S.n===0; $("bt").textContent=ok&&S.dang_dem?"TẮT ĐẾM":"BẬT ĐẾM";
+}
+async function gui(c){
+  try{const r=await fetch("/api/cmd",{method:"POST",body:JSON.stringify({cmd:c})}); $("msg").textContent=r.ok?"Đã gửi lệnh, chờ ESP32 phản hồi":"Không gửi được: ESP32 chưa kết nối"}
+  catch(e){$("msg").textContent="Không gửi được tới server"}
+  setTimeout(()=>{$("msg").textContent=""},3000);
+}
+$("bt").onclick=()=>gui(S&&S.dang_dem?"COUNT_OFF":"COUNT_ON"); $("br").onclick=()=>gui("COUNT_RESET");
+lay(); setInterval(lay,500);
+</script></body></html>

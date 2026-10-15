@@ -1,0 +1,8 @@
+THU GIAO TIEP ESP32 <-> GIAO DIEN (muc dich: kiem tra duong Wi-Fi truoc khi lam he thong lon)
+
+1. Cam E3F: nau -> +12V, xanh duong -> GND chung (noi GND ESP32), den -> GPIO 32. Khong dung dien tro ngoai.
+2. Trong thu muc dem_vat_wifi: sao chep config_mau.h thanh config.h, dien ten Wi-Fi, mat khau, IPv4 may tinh (ipconfig).
+3. Mo dem_vat_wifi.ino bang Arduino IDE, chon board ESP32 Dev Module, bam Verify roi Upload.
+4. Tren may tinh bam dup chay_test.bat. Windows hoi tuong lua: cho phep Python tren mang Private.
+5. Trinh duyet mo http://localhost:8000. Dua vat qua E3F: so tang. Thu nut TAT DEM / BAT DEM / RESET.
+Neu khong thay ESP32 ket noi: cung mang Wi-Fi? dung IPv4? tuong lua? (dung hotspot dien thoai de thu).
